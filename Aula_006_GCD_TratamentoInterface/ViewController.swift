@@ -1,25 +1,45 @@
-//
-//  ViewController.swift
-//  Aula_006_GCD_TratamentoInterface
-//
-//  Created by Swift on 23/01/17.
-//  Copyright © 2017 Swift. All rights reserved.
-//
 
 import UIKit
 
 class ViewController: UIViewController {
+    
+    //MARK: Outlets
+    @IBOutlet weak var botaoProcessar: UIButton!
+    
+    //MARK: Propriedades
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
+    
+    //MARK: Actions
+    @IBAction func processar(_ sender: UIButton) {
+        
+        executar {
+            self.botaoProcessar.isEnabled = true
+        }
+        
+    }
+    
+    
+    //MARK: Métodos Personalizados
+    func executar(callback : @escaping () -> Void){
+        self.botaoProcessar.isEnabled = false
+        
+        DispatchQueue.global().async {
+            for processo in 1...5{
+                if processo == 5 {
+                    DispatchQueue.main.async {
+                        callback()
+                    }
+                }
+                
+                print("Processo GCD: \(processo)")
+                Thread.sleep(forTimeInterval: 1.0)
+            }
+        }
+    }
 
 }
 
